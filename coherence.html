@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+        
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var nodeCopy = document.getElementById(data).cloneNode(true);
+            nodeCopy.id = "guess1"; // change 1 to be same as div #
+            document.getElementById(data).className="guessed";
+            document.getElementById(data).draggable="false";
+            ev.target.appendChild(nodeCopy);
+        }
+    </script>
+    
+    <body>
+        <script>
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var essay = url.searchParams.get("essay-input");
+            // search essay for \t or \n
+            var paragraphs = essay.split("\t");
+            var len = paragraphs.length;
+
+            // generate div&p to hold each paragraph
+            for(var i = 0; i < len; i++) {
+                const newDiv = document.createElement("div");
+                newDiv.className = "box";
+
+                const newDiv2 = document.createElement("div");
+                newDiv2.className = "box";
+
+                const text = document.createTextNode(paragraphs[i]);
+                text.className = "para";
+                text.id = "para" + i;
+                text.draggable = "true";
+                text.ondragstart="drag(event)"
+                
+                newDiv.appendChild(text);
+                document.body.append(newDiv);
+                document.body.append(newDiv2);
+            }
+        </script>
+    </body>
+</html>
